@@ -14,7 +14,8 @@ class CartsService {
       this.carts = JSON.parse(data);
     } catch (error) {
       this.carts = [];
-      await this.saveCarts(); // si no existe el archivo, lo crea vacío
+      await this.saveCarts(); // si no existe el archivo, l
+      //lo crea vacio
     }
   }
 

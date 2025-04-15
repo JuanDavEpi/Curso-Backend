@@ -1,0 +1,62 @@
+[
+  {
+    "id": "abc123",
+    "title": "Camiseta Negra",
+    "description": "Camiseta de algodón 100% color negro",
+    "code": "CAM-001",
+    "price": 25.99,
+    "status": true,
+    "stock": 50,
+    "category": "ropa"
+  },
+  {
+    "id": "def456",
+    "title": "Zapatillas Urbanas",
+    "description": "Zapatillas cómodas para uso diario",
+    "code": "ZAP-002",
+    "price": 49.99,
+    "status": true,
+    "stock": 30,
+    "category": "calzado"
+  },
+  {
+    "id": "ghi789",
+    "title": "Pantalón Jeans",
+    "description": "Pantalón de jean azul clásico",
+    "code": "PAN-003",
+    "price": 39.99,
+    "status": true,
+    "stock": 40,
+    "category": "ropa"
+  },
+  {
+    "id": "jkl012",
+    "title": "Buzo con Capucha",
+    "description": "Buzo de invierno con capucha y bolsillos",
+    "code": "BUZ-004",
+    "price": 59.99,
+    "status": true,
+    "stock": 25,
+    "category": "ropa"
+  },
+  {
+    "id": "mno345",
+    "title": "Mochila Escolar",
+    "description": "Mochila resistente con múltiples compartimentos",
+    "code": "MOC-005",
+    "price": 34.99,
+    "status": true,
+    "stock": 20,
+    "category": "accesorios"
+  },
+  {
+    "id": "pqr678",
+    "title": "Reloj Digital",
+    "description": "Reloj digital resistente al agua con cronómetro",
+    "code": "REL-006",
+    "price": 19.99,
+    "status": true,
+    "stock": 15,
+    "category": "accesorios"
+  }
+]

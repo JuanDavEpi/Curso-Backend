@@ -1,13 +1,14 @@
 const express = require('express');
-const productsRouter = require('./routes/products.routes');
-const cartsRouter = require('./routes/carts.routes');
-
 const app = express();
+const CartManager = require('./managers/CartManager'); 
+const cartManager = new CartManager(); 
+
 app.use(express.json());
 
-app.use('/api/products', productsRouter);
-app.use('/api/carts', cartsRouter);
-
+app.get('/api/carts', (req, res) => {
+  const newCart = cartManager.createCart(); 
+  res.status(201).json(newCart); 
+});
 app.listen(8080, () => {
-  console.log('Servidor escuchando en puerto 8080');
+  console.log('Servidor en puerto 8080');
 });

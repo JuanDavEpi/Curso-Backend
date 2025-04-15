@@ -8,7 +8,7 @@ class ProductsController {
       const products = await this.productsService.getAll();
       res.json(products);
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving products' });
+      res.status(500).json({ message: 'Error recuperando productos' });
     }
   }
 
@@ -19,10 +19,10 @@ class ProductsController {
       if (product) {
         res.json(product);
       } else {
-        res.status(404).json({ message: 'Product not found' });
+        res.status(404).json({ message: 'Productos no encontrados' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving product' });
+      res.status(500).json({ message: 'Error recuperando el producto' });
     }
   }
 
@@ -32,7 +32,7 @@ class ProductsController {
       const createdProduct = await this.productsService.add(newProduct);
       res.status(201).json(createdProduct);
     } catch (error) {
-      res.status(500).json({ message: 'Error adding product' });
+      res.status(500).json({ message: 'Error añadiendo el producto' });
     }
   }
 
@@ -44,10 +44,10 @@ class ProductsController {
       if (result) {
         res.json(result);
       } else {
-        res.status(404).json({ message: 'Product not found' });
+        res.status(404).json({ message: 'Producto no encontrado' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error updating product' });
+      res.status(500).json({ message: 'Error actualizando el producto' });
     }
   }
 
@@ -58,10 +58,10 @@ class ProductsController {
       if (result) {
         res.status(204).send();
       } else {
-        res.status(404).json({ message: 'Product not found' });
+        res.status(404).json({ message: 'Producto no encontrado' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error deleting product' });
+      res.status(500).json({ message: 'Error borrando el producto' });
     }
   }
 }

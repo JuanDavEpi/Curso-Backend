@@ -2,11 +2,12 @@
   "name": "node-express-api",
   "version": "1.0.0",
   "description": "A Node.js and Express API for managing products and shopping carts.",
-  "main": "src/server.js",
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
-  },
+  "main": "server.js",
+"scripts": {
+  "start": "node src/server.js",
+  "dev": "nodemon src/server.js"
+}
+,
   "dependencies": {
     "express": "^4.17.1"
   },

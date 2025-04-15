@@ -8,7 +8,7 @@ class CartsController {
       const newCart = await this.cartsService.createCart();
       res.status(201).json(newCart);
     } catch (error) {
-      res.status(500).json({ message: 'Error creating cart', error });
+      res.status(500).json({ message: 'Error creando carrito', error });
     }
   }
 
@@ -19,10 +19,10 @@ class CartsController {
       if (products) {
         res.status(200).json(products);
       } else {
-        res.status(404).json({ message: 'Cart not found' });
+        res.status(404).json({ message: 'Carrito no encontrado' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error retrieving cart products', error });
+      res.status(500).json({ message: 'Error recuperando los productos del carrito', error });
     }
   }
 
@@ -33,10 +33,10 @@ class CartsController {
       if (updatedCart) {
         res.status(200).json(updatedCart);
       } else {
-        res.status(404).json({ message: 'Cart or product not found' });
+        res.status(404).json({ message: 'Carrito o producto no encontrado' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error adding product to cart', error });
+      res.status(500).json({ message: 'Error añadiendo producto al carrito', error });
     }
   }
 }

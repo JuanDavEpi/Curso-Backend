@@ -8,7 +8,6 @@ class Product {
     this.status = status;
     this.stock = stock;
     this.category = category;
-    this.thumbnails = thumbnails;
   }
 }
 
