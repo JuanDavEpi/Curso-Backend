@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Productos en Tiempo Real</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>Productos en Tiempo Real</h1>
+
+  <form id="productForm">
+    <input type="text" name="title" placeholder="Título" required />
+    <input type="text" name="description" placeholder="Descripción" required />
+    <input type="text" name="code" placeholder="Código" required />
+    <input type="number" name="price" placeholder="Precio" required />
+    <input type="number" name="stock" placeholder="Stock" required />
+    <input type="text" name="category" placeholder="Categoría" required />
+    <button type="submit">Agregar producto</button>
+  </form>
+
+  <ul id="productList">
+    {{#each products}}
+      <li>{{this.title}} - ${{this.price}}</li>
+    {{/each}}
+  </ul>
+
+  <script>
+    const socket = io();
+    const form = document.getElementById('productForm');
+    const productList = document.getElementById('productList');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const product = Object.fromEntries(formData.entries());
+      product.price = parseFloat(product.price);
+      product.stock = parseInt(product.stock);
+      socket.emit('newProduct', product);
+      form.reset();
+    });
+
+    socket.on('productListUpdated', (products) => {
+      productList.innerHTML = '';
+      products.forEach(prod => {
+        const li = document.createElement('li');
+        li.textContent = `${prod.title} - $${prod.price}`;
+        productList.appendChild(li);
+      });
+    });
+  </script>
+</body>
+</html>
