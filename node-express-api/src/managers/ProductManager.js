@@ -1,49 +1,64 @@
-const express = require('express');
-const ProductManager = require('./ProductManager');
+const fs = require('fs');
+const path = require('path');
 
-const productManager = new ProductManager();
-
-const app = express();
-app.use(express.json());
-
-app.get('/api/products', (req, res) => {
-  const products = productManager.getAllProducts();
-  res.status(200).json(products);
-});
-
-app.get('/api/products/:pid', (req, res) => {
-  const { pid } = req.params;
-  const product = productManager.getProductById(pid);
-  if (!product) {
-    return res.status(404).json({ error: 'Producto no encontrado' });
+class ProductManager {
+  constructor() {
+    this.path = path.join(__dirname, '../data/products.json');
+    this.products = this.loadProducts();
   }
-  res.status(200).json(product);
-});
 
-app.post('/api/products', (req, res) => {
-  const { title, description, code, price, status, stock, category, thumbnails } = req.body;
-  const newProduct = productManager.createProduct(title, description, code, price, status, stock, category, thumbnails);
-  res.status(201).json(newProduct);
-});
-
-app.put('/api/products/:pid', (req, res) => {
-  const { pid } = req.params;
-  const updatedProduct = productManager.updateProduct(pid, req.body);
-  if (!updatedProduct) {
-    return res.status(404).json({ error: 'Producto no encontrado' });
+  loadProducts() {
+    if (!fs.existsSync(this.path)) {
+      fs.writeFileSync(this.path, JSON.stringify([]));
+    }
+    const data = fs.readFileSync(this.path, 'utf-8');
+    return JSON.parse(data);
   }
-  res.status(200).json(updatedProduct);
-});
 
-app.delete('/api/products/:pid', (req, res) => {
-  const { pid } = req.params;
-  const deletedProduct = productManager.deleteProduct(pid);
-  if (!deletedProduct) {
-    return res.status(404).json({ error: 'Producto no encontrado' });
+  saveProducts() {
+    fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2));
   }
-  res.status(200).json({ message: 'Producto eliminado' });
-});
 
-app.listen(8080, () => {
-  console.log('Servidor en puerto 8080');
-});
+  getAllProducts() {
+    return this.products;
+  }
+
+  getProductById(id) {
+    return this.products.find(p => p.id === parseInt(id));
+  }
+
+  createProduct(title, description, code, price, status, stock, category, thumbnails = []) {
+    const newProduct = {
+      id: this.products.length ? this.products[this.products.length - 1].id + 1 : 1,
+      title,
+      description,
+      code,
+      price,
+      status,
+      stock,
+      category,
+      thumbnails
+    };
+    this.products.push(newProduct);
+    this.saveProducts();
+    return newProduct;
+  }
+
+  updateProduct(id, updatedFields) {
+    const index = this.products.findIndex(p => p.id === parseInt(id));
+    if (index === -1) return null;
+    this.products[index] = { ...this.products[index], ...updatedFields };
+    this.saveProducts();
+    return this.products[index];
+  }
+
+  deleteProduct(id) {
+    const index = this.products.findIndex(p => p.id === parseInt(id));
+    if (index === -1) return null;
+    const deleted = this.products.splice(index, 1)[0];
+    this.saveProducts();
+    return deleted;
+  }
+}
+
+module.exports = ProductManager;

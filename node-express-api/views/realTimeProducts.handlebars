@@ -1,52 +1,66 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>Productos en Tiempo Real</title>
-  <script src="/socket.io/socket.io.js"></script>
-</head>
-<body>
-  <h1>Productos en Tiempo Real</h1>
+{{!-- Usa el layout main.handlebars --}}
+{{!-- Este archivo debe estar dentro de la carpeta "views" --}}
 
-  <form id="productForm">
-    <input type="text" name="title" placeholder="Título" required />
-    <input type="text" name="description" placeholder="Descripción" required />
-    <input type="text" name="code" placeholder="Código" required />
-    <input type="number" name="price" placeholder="Precio" required />
-    <input type="number" name="stock" placeholder="Stock" required />
-    <input type="text" name="category" placeholder="Categoría" required />
-    <button type="submit">Agregar producto</button>
-  </form>
+<h1>Gestión de Productos en Tiempo Real</h1>
 
-  <ul id="productList">
-    {{#each products}}
-      <li>{{this.title}} - ${{this.price}}</li>
-    {{/each}}
-  </ul>
+<form id="productForm">
+  <input type="text" name="title" placeholder="Título" required>
+  <input type="text" name="description" placeholder="Descripción" required>
+  <input type="text" name="code" placeholder="Código" required>
+  <input type="number" name="price" placeholder="Precio" required>
+  <input type="text" name="status" placeholder="Estado" required>
+  <input type="number" name="stock" placeholder="Stock" required>
+  <input type="text" name="category" placeholder="Categoría" required>
+  <input type="text" name="thumbnails" placeholder="Thumbnails (URL)" required>
+  <button type="submit">Agregar producto</button>
+</form>
 
-  <script>
-    const socket = io();
-    const form = document.getElementById('productForm');
-    const productList = document.getElementById('productList');
+<hr>
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
-      const product = Object.fromEntries(formData.entries());
-      product.price = parseFloat(product.price);
-      product.stock = parseInt(product.stock);
-      socket.emit('newProduct', product);
-      form.reset();
+<ul id="productList">
+  {{#each products}}
+    <li>
+      {{this.title}} - ${{this.price}}
+      <button class="deleteBtn" data-id="{{this.id}}">Eliminar</button>
+    </li>
+  {{/each}}
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const form = document.getElementById('productForm');
+  const productList = document.getElementById('productList');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const producto = {};
+    formData.forEach((value, key) => producto[key] = value);
+    producto.price = parseFloat(producto.price);
+    producto.stock = parseInt(producto.stock);
+    producto.thumbnails = [producto.thumbnails]; // convertir en array
+
+    socket.emit('nuevoProducto', producto);
+    form.reset();
+  });
+
+  productList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('deleteBtn')) {
+      const id = e.target.getAttribute('data-id');
+      socket.emit('eliminarProducto', id);
+    }
+  });
+
+  socket.on('actualizarProductos', ({ products }) => {
+    productList.innerHTML = '';
+    products.forEach(prod => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        ${prod.title} - $${prod.price}
+        <button class="deleteBtn" data-id="${prod.id}">Eliminar</button>
+      `;
+      productList.appendChild(li);
     });
-
-    socket.on('productListUpdated', (products) => {
-      productList.innerHTML = '';
-      products.forEach(prod => {
-        const li = document.createElement('li');
-        li.textContent = `${prod.title} - $${prod.price}`;
-        productList.appendChild(li);
-      });
-    });
-  </script>
-</body>
-</html>
+  });
+</script>
