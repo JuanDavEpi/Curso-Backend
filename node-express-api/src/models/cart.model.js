@@ -1,20 +1,17 @@
-class Cart {
-  constructor(id) {
-    this.id = id;
-    this.products = [];
-  }
+const mongoose = require('mongoose');
 
-  addProduct(product) {
-    this.products.push(product);
-  }
-
-  removeProduct(productId) {
-    this.products = this.products.filter(product => product.id !== productId);
-  }
-
-  getProducts() {
-    return this.products;
-  }
-}
-
-module.exports = Cart;
+const cartSchema = new mongoose.Schema({
+  products: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+      quantity: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
+});
+const Cart = mongoose.model('Cart', cartSchema);

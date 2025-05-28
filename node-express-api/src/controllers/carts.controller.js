@@ -3,6 +3,12 @@ class CartsController {
     this.cartsService = cartsService;
   }
 
+
+  getAllCarts(req, res) {
+    const carts = this.cartsService.getAllCarts(); // o el método correspondiente
+    res.status(200).json(carts);
+  }
+
   async createCart(req, res) {
     try {
       const newCart = await this.cartsService.createCart();

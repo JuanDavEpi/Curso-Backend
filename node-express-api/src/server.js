@@ -8,6 +8,7 @@ const http = require('http');
 const viewsRouter = require('./routes/views.router');
 const productsRouter = require('./routes/products.routes');
 const cartsRouter = require('./routes/carts.routes');
+const { connectDB } = require('./config/db');
 
 // Manager
 const ProductManager = require('./managers/ProductManager');
