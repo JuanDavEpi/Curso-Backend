@@ -1,14 +1,17 @@
-class Product {
-  constructor(id, title, description, code, price, status, stock, category, thumbnails) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.code = code;
-    this.price = price;
-    this.status = status;
-    this.stock = stock;
-    this.category = category;
-  }
-}
+const { status } = require('express/lib/response');
+const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
+productSchema.plugin(mongoosePaginate);
 
-module.exports = Product;
+const productSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  code: String,
+  price: Number,
+  status: Boolean,
+  stock: Number,
+  category: String,
+  thumbnails: [String],
+});
+
+module.exports = mongoose.model('Product', productSchema);

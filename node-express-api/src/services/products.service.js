@@ -1,72 +1,37 @@
-const fs = require('fs').promises;
-const path = require('path');
+const Product = require('../models/Product');
 
 class ProductsService {
-  constructor() {
-    this.path = path.join(__dirname, '../data/products.json');
-    this.products = [];
-    this.loadProducts();
-  }
+  async getAll({ limit = 10, page = 1, sort, query }) {
+    const filter = query
+      ? { $or: [{ category: query }, { status: query === 'true' }] }
+      : {};
 
-  async loadProducts() {
-    try {
-      const data = await fs.readFile(this.path, 'utf-8');
-      this.products = JSON.parse(data);
-    } catch (error) {
-      this.products = [];
-      await this.saveProducts(); // si no existe el archivo, lo crea vacío
-    }
-  }
+    const sortOption = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {};
 
-  async saveProducts() {
-    await fs.writeFile(this.path, JSON.stringify(this.products, null, 2));
-  }
+    const result = await Product.paginate(filter, {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      sort: sortOption
+    });
 
-  async getAll() {
-    return this.products;
+    return result;
   }
 
   async getById(id) {
-    return this.products.find(p => String(p.id) === String(id));
+    return await Product.findById(id);
   }
 
-  async add(product) {
-    const newId = this.products.length > 0
-      ? parseInt(this.products[this.products.length - 1].id) + 1
-      : 1;
-
-    const newProduct = { id: newId.toString(), ...product };
-    this.products.push(newProduct);
-    await this.saveProducts();
-    return newProduct;
+  async add(productData) {
+    return await Product.create(productData);
   }
 
-  async update(id, updatedData) {
-    const index = this.products.findIndex(p => String(p.id) === String(id));
-    if (index === -1) return null;
-
-    // Evitar sobrescribir el ID
-    delete updatedData.id;
-    this.products[index] = { ...this.products[index], ...updatedData };
-    await this.saveProducts();
-    return this.products[index];
+  async update(id, updatedFields) {
+    return await Product.findByIdAndUpdate(id, updatedFields, { new: true });
   }
 
   async delete(id) {
-    const index = this.products.findIndex(p => String(p.id) === String(id));
-    if (index === -1) return false;
-
-    this.products.splice(index, 1);
-    await this.saveProducts();
-    return true;
+    return await Product.findByIdAndDelete(id);
   }
 }
 
 module.exports = ProductsService;
-// const fs = require('fs').promises;
-// const path = require('path');
-//
-// class ProductsService {
-//   constructor() {
-//     this.path = path.join(__dirname, '../data/products.json');
-//     this.products = [];
