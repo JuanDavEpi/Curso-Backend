@@ -1,23 +1,10 @@
-<h1>Productos</h1>
-<ul>
-  {{#each products}}
-    <li>
-      <h2>{{this.title}}</h2>
-      <p>{{this.description}}</p>
-      <p>Precio: ${{this.price}}</p>
-      <p>Categoría: {{this.category}}</p>
-    </li>
-  {{/each}}
-</ul>
-
-<nav>
-  {{#if hasPrevPage}}
-    <a href="/products?page={{prevPage}}">Anterior</a>
-  {{/if}}
-
-  <span>Página {{page}} de {{totalPages}}</span>
-
-  {{#if hasNextPage}}
-    <a href="/products?page={{nextPage}}">Siguiente</a>
-  {{/if}}
-</nav>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi eCommerce</title>
+</head>
+<body>
+  {{{body}}}
+</body>
+</html>

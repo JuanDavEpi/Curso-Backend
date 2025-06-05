@@ -1,7 +1,5 @@
-const { status } = require('express/lib/response');
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
-productSchema.plugin(mongoosePaginate);
 
 const productSchema = new mongoose.Schema({
   title: String,
@@ -14,4 +12,7 @@ const productSchema = new mongoose.Schema({
   thumbnails: [String],
 });
 
-module.exports = mongoose.model('Product', productSchema);
+productSchema.plugin(mongoosePaginate);
+
+const Product = mongoose.model('Product', productSchema);
+module.exports = Product;

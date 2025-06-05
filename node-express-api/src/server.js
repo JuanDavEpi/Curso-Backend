@@ -8,8 +8,14 @@ const http = require('http');
 const viewsRouter = require('./routes/views.router');
 const productsRouter = require('./routes/products.routes');
 const cartsRouter = require('./routes/carts.routes');
-const { connectDB } = require('./config/db');
-connectDB();
+const connectDB = require('./config/db');
+
+const startServer = async () => {
+  await connectDB(); // ✅ Espera la conexión
+  app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+};
+
+startServer();
 
 // Manager
 const ProductManager = require('./managers/ProductManager');

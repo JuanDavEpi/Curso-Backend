@@ -3,10 +3,13 @@ class CartsController {
     this.cartsService = cartsService;
   }
 
-
-  getAllCarts(req, res) {
-    const carts = this.cartsService.getAllCarts(); // o el método correspondiente
-    res.status(200).json(carts);
+  async getAllCarts(req, res) {
+    try {
+      const carts = await this.cartsService.getAllCarts();
+      res.status(200).json(carts);
+    } catch (error) {
+      res.status(500).json({ message: 'Error recuperando carritos', error });
+    }
   }
 
   async createCart(req, res) {
@@ -28,7 +31,7 @@ class CartsController {
         res.status(404).json({ message: 'Carrito no encontrado' });
       }
     } catch (error) {
-      res.status(500).json({ message: 'Error recuperando los productos del carrito', error });
+      res.status(500).json({ message: 'Error recuperando productos del carrito', error });
     }
   }
 
